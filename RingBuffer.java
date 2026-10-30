@@ -7,37 +7,87 @@
 public class RingBuffer 
 {
 
+    private double[] queue;
+    private int size;
+    private int headInd;
+    private int tailInd;
+
     public RingBuffer(int capacity)
     {
+        this.queue = new double[capacity];
+        size = 0;
+        headInd = 0;
+        tailInd = 0;
     }
 
     public int size()
     {
-        return 0;
+        return size;
     }
     
     public boolean isEmpty()
     {
-        return false;
+        return size == 0;
     }
     
     public boolean isFull()
     {
-        return true;
+        return (size == queue.length);
     }
     
-    public void add(double value)
+    public void add(double value) throws OverflowException
     {
+        if(isEmpty()){
+            headInd = 0;
+            tailInd = 0;
+        }
+        else{
+            if(isFull()){
+                throw new OverflowException("Queue is full");
+            }
+            if(tailInd == queue.length - 1){
+                tailInd = 0;
+            }
+            else{
+                tailInd++;
+            }
+        }
+        queue[tailInd] = value;
+        size++;
     }
     
     public double peek()
     {
-        return 0.0;
+        if(isEmpty()){
+            throw new QueueUnderflowException("No elements in the queue");
+        }
+        else
+        return queue[headInd];
     }
     
     public double remove()
     {
-        return 0.0;
+        if(isEmpty()){
+            throw new QueueUnderflowException("No elements in the queue");
+        }
+        else{
+            double current = queue[headInd];
+            queue[headInd] = 0;
+            size--;
+            if(size == 0){
+                headInd = 0;
+                tailInd = 0;
+            }
+            else{
+                if(headInd == queue.length - 1){
+                    headInd = 0;
+                }
+                else{
+                    headInd++;
+                }
+            }
+            return current;
+        }
     }
     
     // a simple test of the constructor and methods in RingBuffer

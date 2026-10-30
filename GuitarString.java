@@ -6,12 +6,19 @@
  */
 public class GuitarString 
 {
+    private RingBuffer ring;
+
     public GuitarString(double frequency) 
     {
+        ring = new RingBuffer((int) (44100 / frequency));
     }
 
     public GuitarString(double[] array) 
     {
+        ring = new RingBuffer(array.length);
+        for(int i = 0; i < array.length; i++){
+            
+        }
     }
 
     public void pluck() 
