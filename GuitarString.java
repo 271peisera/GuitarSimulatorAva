@@ -7,39 +7,52 @@
 public class GuitarString 
 {
     private RingBuffer ring;
+    private int ticTime = 0;
 
     public GuitarString(double frequency) 
     {
-        ring = new RingBuffer((int) (44100 / frequency));
+        int capacity = (int) (44100 / frequency);
+        ring = new RingBuffer(capacity);
+        for (int i = 0; i < capacity; i++) {
+            ring.add(0.0);
+        }
     }
 
     public GuitarString(double[] array) 
     {
         ring = new RingBuffer(array.length);
         for(int i = 0; i < array.length; i++){
-            
+            ring.add(array[i]);
         }
     }
 
     public void pluck() 
     {
+        int samples = ring.size();
+        for (int i = 0; i < samples; i++) {
+            ring.remove();
+            ring.add(Math.random() - 0.5);
+        }
     }
 
     // advance the simulation one time step
     public void tic() 
     {
+        double first = ring.remove();
+        ring.add(((first + ring.peek()) / 2) * 0.994);
+        ticTime++;
     }
 
     // return the current sample
     public double sample() 
     {
-        return 0.0;
+        return ring.peek();
     }
 
     // return number of times tic was called
     public int time() 
     {
-        return 0;
+        return ticTime;
     }
 
     public static void main(String[] args) 

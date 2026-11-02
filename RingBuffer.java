@@ -24,6 +24,11 @@ public class RingBuffer
     {
         return size;
     }
+
+    public int capacity()
+    {
+        return queue.length;
+    }
     
     public boolean isEmpty()
     {
@@ -58,36 +63,34 @@ public class RingBuffer
     
     public double peek()
     {
-        if(isEmpty()){
+        if (isEmpty()) {
             throw new QueueUnderflowException("No elements in the queue");
         }
-        else
         return queue[headInd];
     }
     
     public double remove()
     {
-        if(isEmpty()){
+        if (isEmpty()) {
             throw new QueueUnderflowException("No elements in the queue");
         }
-        else{
-            double current = queue[headInd];
-            queue[headInd] = 0;
-            size--;
-            if(size == 0){
-                headInd = 0;
-                tailInd = 0;
-            }
-            else{
-                if(headInd == queue.length - 1){
-                    headInd = 0;
-                }
-                else{
-                    headInd++;
-                }
-            }
-            return current;
+
+        double current = queue[headInd];
+        queue[headInd] = 0;
+        size--;
+        if (size == 0) {
+            headInd = 0;
+            tailInd = 0;
         }
+        else {
+            if (headInd == queue.length - 1) {
+                headInd = 0;
+            }
+            else {
+                headInd++;
+            }
+        }
+        return current;
     }
     
     // a simple test of the constructor and methods in RingBuffer
