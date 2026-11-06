@@ -11,7 +11,13 @@ public class GuitarString
 
     public GuitarString(double frequency) 
     {
+        if (frequency <= 0 || Double.isNaN(frequency) || Double.isInfinite(frequency)) {
+            throw new IllegalArgumentException("Frequency must be a finite positive value");
+        }
         int capacity = (int) (44100 / frequency);
+        if (capacity < 2) {
+            throw new IllegalArgumentException("Frequency is too high for the sample rate");
+        }
         ring = new RingBuffer(capacity);
         for (int i = 0; i < capacity; i++) {
             ring.add(0.0);
@@ -20,6 +26,9 @@ public class GuitarString
 
     public GuitarString(double[] array) 
     {
+        if (array == null || array.length < 2) {
+            throw new IllegalArgumentException("At least two samples are required");
+        }
         ring = new RingBuffer(array.length);
         for(int i = 0; i < array.length; i++){
             ring.add(array[i]);
